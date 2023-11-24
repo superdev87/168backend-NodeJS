@@ -1,5 +1,6 @@
 const moment = require('moment');
 const lodash = require('lodash');
+// const fetch = require('node-fetch');
 
 const lotteries = require('./lotteries.json');
 const {
@@ -98,8 +99,8 @@ const get_cur_data = async (lottype) => {
             if (lottype.includes('28')) {
               preDrawCode = result.slice(0, 3);
               sumNum = Number(result[3]);
-              sumBigSmall = result[4] == "大" ? 1 : 0;
-              sumSingleDouble = result[5] == "单" ? 1 : 0;
+              sumBigSmall = result[4] == "大" ? 0 : 1;
+              sumSingleDouble = result[5] == "单" ? 0 : 1;
             } else {
               preDrawCode = result.slice(0, 10);
               sumNum = Number(result[10]);
@@ -191,8 +192,8 @@ const get_past_data = async (lottype, date, rows) => {
           let sumNum, sumSingleDouble, sumBigSmall, huLungData = {};
           if (lottype.includes('28')) {
             sumNum = Number(result[3]);
-            sumBigSmall = result[4] == "大" ? 1 : 0;
-            sumSingleDouble = result[5] == "单" ? 1 : 0;
+            sumBigSmall = result[4] == "大" ? 0 : 1;
+            sumSingleDouble = result[5] == "单" ? 0 : 1;
           } else {
             sumNum = Number(result[10]);
             sumBigSmall = Number(result[11] == "大");
