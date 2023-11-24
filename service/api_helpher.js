@@ -1,6 +1,8 @@
 const moment = require('moment');
 const lodash = require('lodash');
-// const fetch = require('node-fetch');
+
+// Load model
+const PlanHistory = require('../model/planHistory');
 
 const lotteries = require('./lotteries.json');
 const {

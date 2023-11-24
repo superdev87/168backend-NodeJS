@@ -3,6 +3,10 @@ const cors = require('cors');
 const app = express();
 const port = 5000;
 
+const {connectDB} = require('./config/db');
+
+require('dotenv').config();
+
 // Import api_helper
 const {
   get_cur_data,
@@ -10,18 +14,21 @@ const {
   get_plan_data
 } = require('./service/api_helpher');
 
+// Connect to mongoDB
+connectDB();
+
 // CORS middleware
 app.use(cors());
 
+// ----------------------------- API ------------------------------
 /**
  * @query {string} lottype - The current lottery type. Ex: sgAirship
  * @returns {object} - Returns an object of current lottery data.
  */
 app.get('/api/getCurData', async (req, res) => {
   const lottype = req.query['lottype'] ?? '';
-
   const resData = await get_cur_data(lottype);
-  // res.send("Success!")
+  
   return res.send(resData);
 });
 
@@ -65,8 +72,7 @@ app.get('/', (req, res) => {
   });
 });
 
+//Run app, then load http://localhost:port in a browser to see the output.
 app.listen(port, () => {
   console.log(`168 backend server is starting and listening on port ${port}!`);
 });
-
-//Run app, then load http://localhost:port in a browser to see the output.
