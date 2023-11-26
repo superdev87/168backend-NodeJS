@@ -115,6 +115,7 @@ const get_cur_data = async (lottype) => {
               'preDrawIssue': curData['termId'],
               'preDrawCode': preDrawCode.join(','),
               'countTime': 60 - Math.floor(Number(parseInt(data['timestamp']) / 1000)) % 60,
+              'preDrawTime': moment(curData['timestamp']).format('YYYY-MM-DD HH:mm:ss'),
               'drawTime': moment(curData['timestamp']).add(1, 'minute').format('YYYY-MM-DD HH:mm:ss'),
               'sumNum': sumNum,
               'sumBigSmall': sumBigSmall,
@@ -146,7 +147,7 @@ const get_cur_data = async (lottype) => {
 }
 
 const get_past_data = async (lottype, date, rows) => {
-  try {
+  /* try {
     const currentLottery = get_current_lottery(lottype);
     let url = currentLottery['url'];
   
@@ -229,6 +230,16 @@ const get_past_data = async (lottype, date, rows) => {
   } catch(err) {
     console.log(err);
   }
+  */
+  try {
+    const records = await PlanHistory
+      .find({lottype: lottype, preDrawTime: { $regex: date }})
+      .limit(rows);
+    records.reverse();
+    return records;
+  } catch (err) {
+    console.log(err);
+  }
   return {};
 }
 
@@ -284,7 +295,7 @@ const get_plan_data = async (gameType, lottype, date, rows) => {
           if (planValues[i].includes(bingoValue)) {
             multiple[i] = -1;
             createPlan[i] = true;
-            if (gameType == 'sum3') profit[i] = Number(profit[i]) + (lotteryCost[i] / PLAN_A_PRICE * TIMES_VALUES[bingoValue]);
+            if (gameType == 'sum3') profit[i] = Number(profit[i]) + (lotteryCost[i] / PLAN_PRICES[i] * TIMES_VALUES[bingoValue]);
             else  profit[i] = (Number(profit[i]) + lotteryCost[i] - 0.01).toFixed(2);
           } else {
             profit[i] = (Number(profit[i]) - lotteryCost[i]).toFixed(2);
