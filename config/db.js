@@ -41,13 +41,17 @@ const save_to_database = () => {
           curData['kpSSingleDouble'] = Math.floor(Math.random() * 2);
           curData['kpresult'] = Math.floor(Math.random() * 2);
 
-          curData['dfFBigSmall'] = Math.floor(Math.random() * 2);
-          curData['dfFSingleDouble'] = Math.floor(Math.random() * 2);
-          curData['dfSBigSmall'] = Math.floor(Math.random() * 2);
-          curData['dfSSingleDouble'] = Math.floor(Math.random() * 2);
+          while (true) {
+            curData['dfFBigSmall'] = Math.floor(Math.random() * 2);
+            curData['dfFSingleDouble'] = Math.floor(Math.random() * 2);
+            curData['dfSBigSmall'] = Math.floor(Math.random() * 2);
+            curData['dfSSingleDouble'] = Math.floor(Math.random() * 2);
 
-          if((curData['cfBigSmall'] == curData['dfFBigSmall'] && curData['cfSingleDouble'] == curData['dfFSingleDouble']) || 
-            (curData['cfBigSmall'] == curData['dfSBigSmall'] && curData['cfSingleDouble'] == curData['dfSSingleDouble']))
+            if(!(curData['dfFBigSmall'] === curData['dfSBigSmall'] && curData['dfFSingleDouble'] === curData['dfSSingleDouble']))  break;
+          }
+
+          if((curData['sumBigSmall'] == curData['dfFBigSmall'] && curData['sumSingleDouble'] == curData['dfFSingleDouble']) || 
+            (curData['sumBigSmall'] == curData['dfSBigSmall'] && curData['sumSingleDouble'] == curData['dfSSingleDouble']))
             curData['dfresult'] = 0;
           else
             curData['dfresult'] = 1;
@@ -82,7 +86,7 @@ const save_to_database = () => {
         curData['lottype'] = lottype;
 
         const record = await PlanHistory.findOne({lottype: lottype, preDrawIssue: curData['preDrawIssue']});
-        if(record) return;
+        if(record !== null) return;
 
         // Add new plan history
         new PlanHistory(curData).save().catch(err => {
@@ -93,8 +97,9 @@ const save_to_database = () => {
         if(lottype.includes('28')) {
           Statistics.findOneAndUpdate(
             { lottype: lottype },
-            statistics[stindex].stat
+            curStat
           ).then(() => {
+            statistics[stindex].stat = curStat;
             console.log(`Successfully update statistics. ${lottype}`);
           }).catch(err => {
             console.log(`Error occured while updating statistics. ${err}`);
