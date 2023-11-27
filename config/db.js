@@ -45,7 +45,12 @@ const save_to_database = () => {
           curData['dfFSingleDouble'] = Math.floor(Math.random() * 2);
           curData['dfSBigSmall'] = Math.floor(Math.random() * 2);
           curData['dfSSingleDouble'] = Math.floor(Math.random() * 2);
-          curData['dfresult'] = Math.floor(Math.random() * 2);
+
+          if((curData['cfBigSmall'] == curData['dfFBigSmall'] && curData['cfSingleDouble'] == curData['dfFSingleDouble']) || 
+            (curData['cfBigSmall'] == curData['dfSBigSmall'] && curData['cfSingleDouble'] == curData['dfSSingleDouble']))
+            curData['dfresult'] = 0;
+          else
+            curData['dfresult'] = 1;
 
           statistics.map((item, index) => {
             if (item.lottype === lottype) {
