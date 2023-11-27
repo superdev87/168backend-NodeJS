@@ -11,7 +11,8 @@ require('dotenv').config();
 const {
   get_cur_data,
   get_past_data,
-  get_plan_data
+  get_plan_data,
+  get_statistics
 } = require('./service/api_helpher');
 
 // Connect to mongoDB
@@ -28,7 +29,7 @@ app.use(cors());
 app.get('/api/getCurData', async (req, res) => {
   const lottype = req.query['lottype'] ?? '';
   const resData = await get_cur_data(lottype);
-  
+
   return res.send(resData);
 });
 
@@ -41,7 +42,7 @@ app.get('/api/getCurData', async (req, res) => {
 app.get('/api/getPastData', async (req, res) => {
   const lottype = req.query['lottype'] ?? '';
   const date = req.query['date'] ?? '';
-  const rows = req.query['rows'] ?? '';
+  const rows = req.query['rows'] ?? 100;
 
   const resData = await get_past_data(lottype, date, rows);
   return res.send(resData);
@@ -62,6 +63,12 @@ app.get('/api/getPlanData', async (req, res) => {
   const resData = await get_plan_data(gameType, lottype, date, rows);
   return res.send(resData);
 });
+
+/**
+ * @query {string} lottype - The current 28 lottery type. Ex: speed28
+ * @returns {object} - Returns statistics object.
+ */
+app.get('/api/getStatistics', async (req, res) => get_statistics(req, res));
 
 app.get('/', (req, res) => {
   // res.send('Hello World!');

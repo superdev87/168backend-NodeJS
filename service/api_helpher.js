@@ -2,7 +2,8 @@ const moment = require('moment');
 const lodash = require('lodash');
 
 // Load model
-const PlanHistory = require('../model/planHistory');
+const PlanHistory = require('../model/PlanHistory');
+const Statistics = require('../model/Statistics');
 
 const lotteries = require('./lotteries.json');
 const {
@@ -59,13 +60,24 @@ const get_cur_data = async (lottype) => {
   try {
     if (currentLottery) {
       if (lottype === 'jianada28' || lottype === 'taiwan28') {
-        const curData = await get_yucedata(currentLottery['curUrl']);
-        const lastData = await get_yucedata(currentLottery['lastUrl']);
+        const [curData, lastData] = await Promise.all([
+          get_yucedata(currentLottery['curUrl']),
+          get_yucedata(currentLottery['lastUrl'])
+        ]);
 
         if (curData && lastData) {
           const preDrawCode = lastData['openNums'].split(',');
           const values = preDrawCode.map((value) => parseInt(value, 10));
           const sumNum = lodash.sum(values);
+          let totalCount, drawCount;
+
+          if(lottype === 'jianada28') {
+            totalCount = 394;
+            drawCount = (Number(curData['section']) - 64) % 393 + 1;
+          } else {
+            totalCount = 204;
+            drawCount = (Number(curData['section']) - 29) % 203 + 1;
+          }
           
           return {
             'preDrawIssue': curData['section'],
@@ -75,7 +87,9 @@ const get_cur_data = async (lottype) => {
             'drawTime': moment(curData['openTime']).utc().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss'),
             'sumNum': sumNum,
             'sumBigSmall': Number(sumNum > 13),
-            'sumSingleDouble': Number(sumNum % 2)
+            'sumSingleDouble': Number(sumNum % 2),
+            'totalCount': totalCount,
+            'drawCount': drawCount
           }
         }
       } else {
@@ -119,7 +133,9 @@ const get_cur_data = async (lottype) => {
               'drawTime': moment(curData['timestamp']).add(1, 'minute').format('YYYY-MM-DD HH:mm:ss'),
               'sumNum': sumNum,
               'sumBigSmall': sumBigSmall,
-              'sumSingleDouble': sumSingleDouble
+              'sumSingleDouble': sumSingleDouble,
+              'totalCount': 1440,
+              'drawCount': parseInt(curData['termId'].substr(-4))
             }
 
             if (!lottype.includes('28')) {
@@ -232,23 +248,28 @@ const get_past_data = async (lottype, date, rows) => {
   }
   */
   try {
+    // PlanHistory.createIndexes({lottype: 1, preDrawTime: 1});
     const records = await PlanHistory
       .find({lottype: lottype, preDrawTime: { $regex: date }})
+      .sort({preDrawIssue: -1})
       .limit(rows);
-    records.reverse();
     return records;
   } catch (err) {
     console.log(err);
   }
-  return {};
+  return [];
 }
 
 const get_plan_data = async (gameType, lottype, date, rows) => {
   try {
     const result = [];
     const resData = [];
-    const pastData = await get_past_data(lottype, date, rows);
-    const curData = await get_cur_data(lottype);
+    const time = moment();
+    const [pastData, curData] = await Promise.all([
+      get_past_data(lottype, date, rows),
+      get_cur_data(lottype)
+    ]);
+    console.log(`Execution time: ${moment().diff(time, "seconds")}`);
 
     pastData.unshift(curData);
     
@@ -338,8 +359,23 @@ const get_plan_data = async (gameType, lottype, date, rows) => {
   }
 }
 
+const get_statistics = (req, res) => {
+  const lottype = req.query['lottype'] ?? '';
+
+  try {
+    Statistics.findOne({lottype: lottype}).then(stat => {
+      if(!stat)  res.status(404).json({});
+      else  res.status(200).json(stat);
+    })
+  } catch(err) {
+    console.log('Error occured while loading statistics');
+    res.status(500).json({'message': 'failed'});
+  }
+}
+
 module.exports = {
   get_cur_data,
   get_past_data,
-  get_plan_data
+  get_plan_data,
+  get_statistics
 }
