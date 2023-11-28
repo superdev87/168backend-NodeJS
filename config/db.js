@@ -64,9 +64,9 @@ const save_to_database = () => {
 
           if((curData['sumBigSmall'] == curData['dfFBigSmall'] && curData['sumSingleDouble'] == curData['dfFSingleDouble']) || 
             (curData['sumBigSmall'] == curData['dfSBigSmall'] && curData['sumSingleDouble'] == curData['dfSSingleDouble']))
-            curData['dfresult'] = 0;
-          else
             curData['dfresult'] = 1;
+          else
+            curData['dfresult'] = 0;
 
           statistics.map((item, index) => {
             if (item.lottype === lottype) {
