@@ -32,9 +32,20 @@ const save_to_database = () => {
           return;
         }
         if (lottype.includes('28')) {
-          curData['cfBigSmall'] = Math.floor(Math.random() * 2);
-          curData['cfSingleDouble'] = Math.floor(Math.random() * 2);
-          curData['cfresult'] = Math.floor(Math.random() * 4);
+          if (Math.floor(Math.random() * 5) == 0) {
+            curData['cfBigSmall'] = curData['sumBigSmall'];
+            curData['cfSingleDouble'] = curData['sumSingleDouble'];
+            curData['cfresult'] = Math.floor(Math.random() * 3) + 1;
+          } else {
+            curData['cfresult'] = 0;
+            while (true) {
+              curData['cfBigSmall'] = Math.floor(Math.random() * 2);
+              curData['cfSingleDouble'] = Math.floor(Math.random() * 2);
+
+              if(!(curData['cfBigSmall'] === curData['sumBigSmall'] && curData['cfSingleDouble'] === curData['sumSingleDouble']))
+                break;
+            }
+          }
           
           curData['kpFBigSmall'] = Math.floor(Math.random() * 2);
           curData['kpSBigSmall'] = Math.floor(Math.random() * 2);
@@ -47,7 +58,8 @@ const save_to_database = () => {
             curData['dfSBigSmall'] = Math.floor(Math.random() * 2);
             curData['dfSSingleDouble'] = Math.floor(Math.random() * 2);
 
-            if(!(curData['dfFBigSmall'] === curData['dfSBigSmall'] && curData['dfFSingleDouble'] === curData['dfSSingleDouble']))  break;
+            if(!(curData['dfFBigSmall'] === curData['dfSBigSmall'] && curData['dfFSingleDouble'] === curData['dfSSingleDouble']))
+              break;
           }
 
           if((curData['sumBigSmall'] == curData['dfFBigSmall'] && curData['sumSingleDouble'] == curData['dfFSingleDouble']) || 
