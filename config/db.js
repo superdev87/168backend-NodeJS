@@ -21,7 +21,6 @@ const save_to_database = () => {
     if (lottery.countTime == 0) {
       get_cur_data(lottype).then(async (response) => {
         const { countTime, ...curData} = response;
-        const values = (curData['preDrawCode'] ?? '').split(',').map(value => parseInt(value));
 
         let curStat = {};
         let stindex = 0; // statistics index
@@ -48,7 +47,7 @@ const save_to_database = () => {
           }
           
           curData['kpFBigSmall'] = Math.floor(Math.random() * 2);
-          curData['kpSBigSmall'] = Number(!(curData['kpFBigSmall']));
+          curData['kpSBigSmall'] = 1 - curData['kpFBigSmall'];
           curData['kpSSingleDouble'] = Math.floor(Math.random() * 2);
           curData['kpresult'] = Math.floor(Math.random() * 2);
 
@@ -175,7 +174,7 @@ const correctDatabase = async () => {
       newRecord['cfSingleDouble'] = newRecord['sumSingleDouble'];
       newRecord['cfresult'] = Math.floor(Math.random() * 3) + 1;
     } else {
-      record['cfresult'] = 0;
+      newRecord['cfresult'] = 0;
       while (true) {
         newRecord['cfBigSmall'] = Math.floor(Math.random() * 2);
         newRecord['cfSingleDouble'] = Math.floor(Math.random() * 2);
@@ -209,13 +208,13 @@ const connectDB = () => {
   connection.on("connected", () => {
     console.log(`Database connected: ${url}`);
     initializeStatistics();
-    correctDatabase();
-    // intervalID = setInterval(save_to_database, 1000);
+    // correctDatabase();
+    intervalID = setInterval(save_to_database, 1000);
   });
   
   connection.on("disconnected", () => {
     console.log(`Database disconnected: ${url}`);
-    // clearInterval(intervalID);
+    clearInterval(intervalID);
   });
  
   connection.on("error", (err) => {
