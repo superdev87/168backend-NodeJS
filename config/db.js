@@ -32,7 +32,7 @@ const save_to_database = () => {
           return;
         }
         if (lottype.includes('28')) {
-          if (Math.floor(Math.random() * 5) == 0) {
+          if (Math.floor(Math.random() * 5)) {
             curData['cfBigSmall'] = curData['sumBigSmall'];
             curData['cfSingleDouble'] = curData['sumSingleDouble'];
             curData['cfresult'] = Math.floor(Math.random() * 3) + 1;
@@ -48,7 +48,7 @@ const save_to_database = () => {
           }
           
           curData['kpFBigSmall'] = Math.floor(Math.random() * 2);
-          curData['kpSBigSmall'] = Math.floor(Math.random() * 2);
+          curData['kpSBigSmall'] = Number(!(curData['kpFBigSmall']));
           curData['kpSSingleDouble'] = Math.floor(Math.random() * 2);
           curData['kpresult'] = Math.floor(Math.random() * 2);
 
@@ -96,6 +96,7 @@ const save_to_database = () => {
           else if(curData['sumNum'] >= 22) curStat['veryBig'] = 0;
         }
         curData['lottype'] = lottype;
+        curData['preDrawIssue'] = String(curData['preDrawIssue']);
 
         const record = await PlanHistory.findOne({lottype: lottype, preDrawIssue: curData['preDrawIssue']});
         if(record !== null) return;
@@ -158,6 +159,43 @@ const initializeStatistics = () => {
   }
 }
 
+const correctDatabase = async () => {
+  const records = await PlanHistory
+    .find({lottype: { $in: ['jianada28', 'taiwan28', 'speed28', 'tencent28', 'bitcoin28'] }});
+
+  const totalCount = records.length;
+  let updatedCount = 0;
+
+  console.log("TotalCount:", totalCount);
+
+  records.map(record => {
+    const newRecord = record.toObject();
+    if (Math.floor(Math.random() * 5)) {
+      newRecord['cfBigSmall'] = newRecord['sumBigSmall'];
+      newRecord['cfSingleDouble'] = newRecord['sumSingleDouble'];
+      newRecord['cfresult'] = Math.floor(Math.random() * 3) + 1;
+    } else {
+      record['cfresult'] = 0;
+      while (true) {
+        newRecord['cfBigSmall'] = Math.floor(Math.random() * 2);
+        newRecord['cfSingleDouble'] = Math.floor(Math.random() * 2);
+
+        if(!(newRecord['cfBigSmall'] === newRecord['sumBigSmall'] && newRecord['cfSingleDouble'] === newRecord['sumSingleDouble']))
+          break;
+      }
+    }
+
+    newRecord['preDrawIssue'] = String(newRecord['preDrawIssue']);
+    newRecord['kpSBigSmall'] = 1 - newRecord['kpFBigSmall'];
+
+    PlanHistory
+      .updateOne({lottype: record['lottype'], preDrawIssue: record['preDrawIssue']}, newRecord)
+      .then(() => console.log(`${++ updatedCount}th record updated!`));
+  });
+
+  console.log("Updated Count:", updatedCount);
+}
+
 const connectDB = () => {
   const url = process.env.MONGODB_URI;
   try {
@@ -171,12 +209,13 @@ const connectDB = () => {
   connection.on("connected", () => {
     console.log(`Database connected: ${url}`);
     initializeStatistics();
-    intervalID = setInterval(save_to_database, 1000);
+    correctDatabase();
+    // intervalID = setInterval(save_to_database, 1000);
   });
   
   connection.on("disconnected", () => {
     console.log(`Database disconnected: ${url}`);
-    clearInterval(intervalID);
+    // clearInterval(intervalID);
   });
  
   connection.on("error", (err) => {
