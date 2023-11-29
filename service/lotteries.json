@@ -1,69 +1,69 @@
 [
   {
     "lottype": "sgAirship",
-    "url": "https://api.api168168.com/pks/getPksHistoryList.do?lotCode=10058",
+    "pastUrl": "https://api.api168168.com/pks/getPksHistoryList.do?lotCode=10058",
     "curUrl": "https://api.api168168.com/pks/getLotteryPksInfo.do?lotCode=10058"
   },
   {
     "lottype": "sgssc",
-    "url": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10075",
+    "pastUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10075",
     "curUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCai.do?lotCode=10075"
   },
   {
     "lottype": "xyssc",
-    "url": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10059",
+    "pastUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10059",
     "curUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCai.do?lotCode=10059"
   },
   {
     "lottype": "jisussc",
-    "url": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10036",
+    "pastUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCaiList.do?lotCode=10036",
     "curUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCai.do?lotCode=10036"
   },
   {
     "lottype": "sgk3",
-    "url": "https://api.api168168.com/lotteryJSFastThree/getJSFastThreeList.do?lotCode=10076",
+    "pastUrl": "https://api.api168168.com/lotteryJSFastThree/getJSFastThreeList.do?lotCode=10076",
     "curUrl": "https://api.api168168.com/lotteryJSFastThree/getBaseJSFastThree.do?lotCode=10076"
   },
   {
     "lottype": "jisuksan",
-    "url": "https://api.api168168.com/lotteryJSFastThree/getJSFastThreeList.do?lotCode=10052",
+    "pastUrl": "https://api.api168168.com/lotteryJSFastThree/getJSFastThreeList.do?lotCode=10052",
     "curUrl": "https://api.api168168.com/lotteryJSFastThree/getBaseJSFastThree.do?lotCode=10052"
   },
   {
     "lottype": "jianada28",
-    "url": "https://lottery.ms88kj4.com/pceggdata/getPcLucky28List?lotCode=10169",
+    "pastUrl": "https://lottery.ms88kj4.com/pceggdata/getPcLucky28List?lotCode=10169",
     "curUrl": "https://ttapi.pcdd.in/Mobile/Indexs/next/type/2",
     "lastUrl": "https://ttapi.pcdd.in/Mobile/Indexs/latest/type/2"
   },
   {
     "lottype": "taiwan28",
-    "url": "https://lottery.ms88kj4.com/pceggdata/getPcLucky28List?lotCode=10171",
+    "pastUrl": "https://lottery.ms88kj4.com/pceggdata/getPcLucky28List?lotCode=10171",
     "curUrl": "https://ttapi.pcdd.in/Mobile/Indexs/next/type/1",
     "lastUrl": "https://ttapi.pcdd.in/Mobile/Indexs/latest/type/1"
   },
   {
     "lottype": "jisusc",
-    "url": "https://act.fsaad334546gfa.com/game/results?gameType=05",
+    "pastUrl": "https://act.fsaad334546gfa.com/game/results?gameType=05",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=05"
   },
   {
     "lottype": "jisuft",
-    "url": "https://act.fsaad334546gfa.com/game/results?gameType=31",
+    "pastUrl": "https://act.fsaad334546gfa.com/game/results?gameType=31",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=31"
   },
   {
     "lottype": "speed28",
-    "url": "https://act.fsaad334546gfa.com/game/results?gameType=08",
+    "pastUrl": "https://act.fsaad334546gfa.com/game/results?gameType=08",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=08"
   },
   {
     "lottype": "tencent28",
-    "url": "https://act.fsaad334546gfa.com/game/results?gameType=07",
+    "pastUrl": "https://act.fsaad334546gfa.com/game/results?gameType=07",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=07"
   },
   {
     "lottype": "bitcoin28",
-    "url": "https://act.fsaad334546gfa.com/game/results?gameType=41",
+    "pastUrl": "https://act.fsaad334546gfa.com/game/results?gameType=41",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=41"
   }
 ]
