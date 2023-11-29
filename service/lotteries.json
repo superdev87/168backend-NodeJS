@@ -5,10 +5,6 @@
   },
   {
     "lottype": "sgssc",
-    "curUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCai.do?lotCode=10075"
-  },
-  {
-    "lottype": "xyssc",
     "curUrl": "https://api.api168168.com/CQShiCai/getBaseCQShiCai.do?lotCode=10059"
   },
   {
@@ -42,10 +38,6 @@
   },
   {
     "lottype": "speed28",
-    "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=08"
-  },
-  {
-    "lottype": "tencent28",
     "curUrl": "https://act.fsaad334546gfa.com/game/results?gameType=07"
   },
   {
